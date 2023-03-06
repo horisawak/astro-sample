@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const pageTitle = "Tag Index";
+const base_url = import.meta.env.BASE_URL;
+
+const allPosts = await Astro.glob('../posts/*.md');
+const rawTags = allPosts.map((post) => (post.frontmatter.tags)).flat();
+const tags = [...new Set(rawTags)];
+---
+<BaseLayout pageTitle={pageTitle}>
+  <div class="tags">
+    {tags.map((tag) => (
+      <p class="tag">
+        <a href={`${base_url}tags/${tag}`}>{tag}</a>
+      </p>
+    ))}
+  </div>
+</BaseLayout>
+
+<style>
+  a {
+    color: #00539F;
+  }
+        
+  .tags {
+    display: flex; 
+    flex-wrap: wrap; 
+    margin: 0 auto;  
+  }
+
+  .tag {
+    margin: 0.25em;
+    border: dotted 1px #a1a1a1;
+    border-radius: .5em;
+    padding: .5em 1em;
+    font-size: 1.15em;
+    background-color: #F8FCFD;
+  }
+</style>
