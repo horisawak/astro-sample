@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const pageTitle = "microCMS blog";
+
+//microCMS呼び出し
+import { getBlogs } from "../../library/microcms";
+import type { Blog } from "../../library/microcms";
+const response = await getBlogs({ fields: ["id", "title", "createdAt", "eyecatch", "category"] });
+---
+
+<BaseLayout pageTitle={pageTitle}>
+  <main>
+    <ul>
+      {
+        response.contents.map((content: Blog) => (
+          <li>
+            <a href={content.id}>
+              <img src={content.eyecatch.url} />
+              <p>{content.title}</p>
+            </a>
+            <span class="date">{content.createdAt}</span>
+            <span class="category">{content.category.name}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    margin: auto;
+    padding: 1em;
+  }
+  ul {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-left: 0;
+  }
+  li {
+    flex: 1 1 0%;
+    padding: 0.5rem 1rem;
+    list-style:none;
+    background-color: #ffffff;
+    text-decoration: none;
+  }
+  li img {
+    max-width: 100%;
+  }
+  .category {
+    color: #333333;
+    display: inline-flex;
+    margin: 0.25em;
+    border: dotted 1px #a1a1a1;
+    border-radius: .5em;
+    padding: .5em 1em;
+    font-size: 0.8em;
+    background-color: #F8FCFD;
+  }
+  .date {
+    color: #333333;
+    display: inline-flex;
+    margin: 0.25em;
+    font-size: 0.8em;
+  }
+</style>
