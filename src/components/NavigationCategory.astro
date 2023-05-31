@@ -1,0 +1,19 @@
+---
+// microCMSのAPI
+import { getCategories } from "../library/microcms";
+// microCMSからカテゴリ一覧を取得
+const allCategory = await getCategories({ fields: ["id", "name"] });
+const rawCategories = allCategory.contents.map((category) => {
+    category.id
+    return 0;
+});
+
+// ベースURL取得
+const baseUrl = import.meta.env.BASE_URL;
+---
+<div class="nav-links">
+  <a href={`${baseUrl}`}>すべての記事</a>
+  {allCategory.contents.map((category) => (
+    <a href={`${baseUrl}category/${category.id}`}>{category.name}</a>
+  ))}
+</div>

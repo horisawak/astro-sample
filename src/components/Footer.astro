@@ -3,14 +3,29 @@ import Social from './Social.astro';
 ---
 <style>
   footer {
+    background-color: #333;
+    color: #fff;
+  }
+  .sns-wrapper {
     display: flex;
     gap: 1rem;
-    margin-top: 2rem;
+    padding: 10px;
+    margin: 0 0 0 auto;
+    width: fit-content;
+  }
+  .company {
+    padding: 1rem;
+    text-align: center;
   }
 </style>
 
 <footer>
-  <Social platform="github" username="horisawak/astro-sample" />
-  <Social platform="twitter" username="astrodotbuild" />
-  <Social platform="youtube" username="astrodotbuild" />
+  <div class="sns-wrapper">
+    <Social platform="github" username="horisawak/astro-sample" />
+    <Social platform="twitter" username="astrodotbuild" />
+    <Social platform="youtube" username="astrodotbuild" />  
+  </div>
+  <div class="company">
+    &copy;&nbsp;2023&nbsp;株式会社xxx
+  </div>
 </footer>

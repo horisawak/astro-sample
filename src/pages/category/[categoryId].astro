@@ -1,18 +1,42 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-// microCMSのAPI
-import { getBlogs } from "../library/microcms";
-// microCMSの情報の型
-import type { Blog } from "../library/microcms";
-// microCMSの全記事を取得
-const response = await getBlogs({ fields: ["id", "title", "updatedAt", "eyecatch", "category"] });
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
-const pageTitle = "Home Page";
+// microCMSのAPI
+import { getBlogs } from "../../library/microcms";
+import { getCategories } from "../../library/microcms";
+// microCMSの情報の型
+import type { Blog } from "../../library/microcms";
+import type { Category } from "../../library/microcms";
+
+// カテゴリ一覧 (microCMSのカテゴリ情報で生成)
+export async function getStaticPaths() {
+  // microCMSからカテゴリ一覧を取得
+  const allCategory = await getCategories({ fields: ["id", "name"] });
+  // IDのみ取り出す
+  return allCategory.contents.map((content: Category) => {
+    return {
+      params: { categoryId: content.id },
+      props: { categoryName: content.name },
+    };
+  });
+}
+// カテゴリIDを設定
+const { categoryId } = Astro.params;
+const { categoryName } = Astro.props;
+const pageTitle = categoryName + "の記事一覧";
+
+// 表示されているカテゴリのブログ記事のみを取得
+const response = await getBlogs({
+  filters: "category[equals]" + categoryId,
+  fields: ["id", "title", "createdAt", "eyecatch", "category"]
+});
+
+// ベースURL取得
 const baseUrl = import.meta.env.BASE_URL;
 ---
+
 <BaseLayout pageTitle={pageTitle}>
   <main>
-    <h2>最新の記事</h2>
     <div class="wrapper">
       {
         response.contents.map((content: Blog) => (
@@ -23,7 +47,7 @@ const baseUrl = import.meta.env.BASE_URL;
               </div>
               <div>
                 <p>{content.title}</p>
-                <div class="date">{content.updatedAt}</div>
+                <div class="date">{content.createdAt}</div>
                 <div class="category">{content.category.name}</div>
               </div>
             </div>

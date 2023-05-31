@@ -9,6 +9,15 @@ const response = await getBlogs({ fields: ["id", "title", "createdAt", "eyecatch
 ---
 
 <BaseLayout pageTitle={pageTitle}>
+  <div>
+    {
+      response.contents.map((content: Blog) => (
+        <p>
+          <a href={`category/${content.category.id}`}>{content.category.name}</a>
+        </p>
+      ))
+    }
+  </div>
   <main>
     <ul>
       {

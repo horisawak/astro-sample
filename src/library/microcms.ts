@@ -11,7 +11,7 @@ export type Eyecatch = {
   height: number;
   width: number;
 };
-export type Category = {
+export type CategoryInBlog = {
   id: string;
   name: string;
 }
@@ -24,7 +24,7 @@ export type Blog = {
   title: string;
   content: string;
   eyecatch: Eyecatch;
-  category: Category;
+  category: CategoryInBlog;
 };
 export type BlogResponse = {
   totalCount: number;
@@ -32,6 +32,22 @@ export type BlogResponse = {
   limit: number;
   contents: Blog[];
 };
+
+export type Category = {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  revisedAt: string;
+  name: string;
+};
+export type CategoryResponse = {
+  totalCount: number;
+  offset: number;
+  limit: number;
+  contents: Category[];
+};
+
 
 //APIの呼び出し
 export const getBlogs = async (queries?: MicroCMSQueries) => {
@@ -46,4 +62,7 @@ export const getBlogDetail = async (
     contentId,
     queries,
   });
+};
+export const getCategories = async (queries?: MicroCMSQueries) => {
+  return await client.get<CategoryResponse>({ endpoint: "categories", queries });
 };
